@@ -1,13 +1,29 @@
-import React from 'react';
+import React, { use } from 'react';
 import { Link, NavLink } from 'react-router';
 import logo from '../assets/logo/pngegg.png'
 import MyLink from './MyLink';
+import { AuthContext } from '../contexts/AuthContext';
 
 const Navbar = () => {
+    const { user , logOut } = use(AuthContext);
 
-    const links = <> 
+    const handleLogOut = () => {
+        logOut()
+        .then()
+        .catch()
+    }
+
+    const links = <>
         <li><MyLink className='font-medium' to="/">Home</MyLink></li>
         <li><MyLink className='font-medium' to="/pets-supplies">Pets & Supplies</MyLink></li>
+        {
+            user && <>
+                <li><MyLink className='font-medium' to="/add-listing">Add Listing</MyLink></li>
+                <li><MyLink className='font-medium' to="/my-listings">My Listings</MyLink></li>
+                <li><MyLink className='font-medium' to="/my-orders">My Orders</MyLink></li>
+
+            </>
+        }
     </>
 
     return (
@@ -24,9 +40,14 @@ const Navbar = () => {
                         {links}
                     </ul>
                 </div>
-                <div className="navbar-end gap-1">
-                    <Link to={"/login"} className='btn btn-sm font-semibold text-sm rounded-sm my-btn '>Login</Link>
-                    <Link to={"/register"} className='btn btn-sm font-semibold text-sm rounded-sm my-btn'>Register</Link>
+                <div className='navbar-end'>
+                    {
+                        user ? <Link to={"/"} onClick={handleLogOut} className='btn btn-sm font-semibold text-sm rounded-sm my-btn '>Logout</Link> :
+                            <div className="navbar-end gap-1">
+                                <Link to={"/login"} className='btn btn-sm font-semibold text-sm rounded-sm my-btn '>Login</Link>
+                                <Link to={"/register"} className='btn btn-sm font-semibold text-sm rounded-sm my-btn'>Register</Link>
+                            </div>
+                    }
                 </div>
                 <div className="dropdown dropdown-left  dropdown-bottom">
                     <div tabIndex={0} role="button" className=" px-1 lg:hidden">

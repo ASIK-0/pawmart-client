@@ -19,9 +19,9 @@ const Footer = () => {
                             PawMart connects local pet owners and buyers for adoption and pet care products.
                         </p>
                         <div className="flex gap-4 mt-5">
-                            <a href="https://www.facebook.com/share/14SJAeG8YZL/"><i class="fa-brands fa-facebook"></i></a>
-                            <a href=""><i class="fa-brands fa-x-twitter"></i></a>
-                            <a href="https://www.instagram.com/_ash1ik_?igsh=MW5hZWFheGtoaWNqNw=="><i class="fa-brands fa-instagram"></i></a>
+                            <a href="https://www.facebook.com/share/14SJAeG8YZL/"><i className="fa-brands fa-facebook"></i></a>
+                            <a href=""><i className="fa-brands fa-x-twitter"></i></a>
+                            <a href="https://www.instagram.com/_ash1ik_?igsh=MW5hZWFheGtoaWNqNw=="><i className="fa-brands fa-instagram"></i></a>
                         </div>
                     </div>
 
@@ -55,11 +55,11 @@ const Footer = () => {
                         <h3 className="font-semibold text-2xl text-gray-800 mb-4">Contact Us</h3>
                         <div className="space-y-3 text-gray-600 text-sm">
                             <div className="flex items-center gap-2">
-                                <span className="text-pink-600"><i class="fa-solid fa-house"></i></span>
+                                <span className="text-pink-600"><i className="fa-solid fa-house"></i></span>
                                 <p>Dhaka, Bangladesh</p>
                             </div>
                             <div className="flex items-center gap-2">
-                                <span className="text-pink-600"><i class="fa-regular fa-envelope"></i></span>
+                                <span className="text-pink-600"><i className="fa-regular fa-envelope"></i></span>
                                 <p>exe.ashiqui@gmail.com</p>
                             </div>
                             <div className="flex items-center gap-2">
