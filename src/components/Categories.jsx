@@ -8,6 +8,7 @@ const Categories = () => {
         <div className='w-11/12 mx-auto px-4 sm:px-6 lg:px-8'>
             <h1 className='font-bold text-3xl md:text-5xl text-center text-pink-500'>Categories</h1>
             <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 py-10 gap-8 justify-center justify-items-center'>
+                
                 <div className="group p-5 w-[250px] h-[150px] shadow-md rounded-xl bg-pink-100/50 cursor-pointer 
                    flex flex-col items-center justify-center
                    hover:shadow-xl hover:-translate-y-1 hover:bg-pink-100/80
@@ -15,6 +16,7 @@ const Categories = () => {
                     <img src={p1} className="w-20 mb-2 group-hover:scale-110 transition-transform duration-300" alt="Pets" />
                     <h3 className="font-semibold text-gray-800">Pets</h3>
                 </div>
+
                 <div className="group p-5 w-[250px] h-[150px] shadow-md rounded-xl bg-amber-100/50 cursor-pointer 
                    flex flex-col items-center justify-center
                    hover:shadow-xl hover:-translate-y-1 hover:bg-amber-100/80
@@ -22,6 +24,7 @@ const Categories = () => {
                     <img src={p2} className="w-20 mb-2 group-hover:scale-110 transition-transform duration-300" alt="Pet Food" />
                     <h3 className="font-semibold text-gray-800">Pet Food</h3>
                 </div>
+
                 <div className="group p-5 w-[250px] h-[150px] shadow-md rounded-xl bg-sky-100/95 cursor-pointer 
                    flex flex-col items-center justify-center
                    hover:shadow-xl hover:-translate-y-1 hover:bg-sky-100
@@ -29,6 +32,7 @@ const Categories = () => {
                     <img src={p3} className="w-20 mb-2 group-hover:scale-110 transition-transform duration-300" alt="Accessories" />
                     <h3 className="font-semibold text-gray-800">Accessories</h3>
                 </div>
+
                 <div className="group p-5 w-[250px] h-[150px] shadow-md rounded-xl bg-emerald-100/50 cursor-pointer 
                    flex flex-col items-center justify-center
                    hover:shadow-xl hover:-translate-y-1 hover:bg-emerald-100/80
