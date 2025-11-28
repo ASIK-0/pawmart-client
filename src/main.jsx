@@ -14,6 +14,7 @@ import AddListing from './pages/AddListing.jsx';
 import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
 import AuthProvider from './contexts/AuthProvider.jsx';
+import { Toaster } from 'react-hot-toast';
 
 
 const router = createBrowserRouter([
@@ -57,6 +58,10 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <AuthProvider>
       <RouterProvider router={router} />
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+      />
     </AuthProvider>
   </StrictMode>
 )
