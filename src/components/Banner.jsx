@@ -1,3 +1,4 @@
+// components/Banner.jsx
 import React from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -8,71 +9,85 @@ const Banner = () => {
     const settings = {
         dots: true,
         infinite: true,
-        speed: 800,
+        speed: 1000,
         slidesToShow: 1,
         slidesToScroll: 1,
         autoplay: true,
-        autoplaySpeed: 4500,
-        arrows: false,
+        autoplaySpeed: 5000,
         fade: true,
-        cssEase: "cubic-bezier(0.7, 0, 0.3, 1)",
+        arrows: false,
         appendDots: (dots) => (
-            <div className="pb-6">
-                <ul className="flex justify-center gap-3"> {dots} </ul>
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2">
+                <ul className="flex gap-2"> {dots} </ul>
             </div>
         ),
         customPaging: () => (
-            <div className="w-2 h-2 bg-white/50 rounded-full hover:bg-pink-400 transition-all duration-300"></div>
+            <div className="w-3 h-3 bg-white/40 rounded-full hover:bg-pink-500 transition-all duration-300"></div>
         ),
     };
 
     const slides = [
         {
-            img: "https://images.pexels.com/photos/45170/kittens-cat-cat-puppy-rush-45170.jpeg",
             title: "Find Your Furry Friend Today!",
-            subtitle: "Browse hundreds of adorable pets waiting for their forever home",
+            subtitle: "Fur Babies Waiting for You",
+            description: "Because Every Pet Deserves Love and Care",
+            image: "https://i.pinimg.com/1200x/5f/b3/de/5fb3deaa5848d918aa0413f9cb54a56b.jpg",
         },
         {
-            img: "https://images.pexels.com/photos/8473661/pexels-photo-8473661.jpeg",
-            title: "Adopt, Don’t Shop — Give a Pet a Home.",
-            subtitle: "Every adoption saves a life and brings endless joy",
+            title: "Give a Pet a Second Chance, Be Their Hero",
+            subtitle: "Hundreds of adorable pets are waiting for you",
+            description: "Join thousands of happy pet parents",
+            image: "https://i.pinimg.com/736x/b8/83/25/b8832573d2a9f6ff81dae19d02be422d.jpg",
         },
         {
-            img: "https://images.pexels.com/photos/332974/pexels-photo-332974.jpeg",
-            title: "Because Every Pet Deserves Love and Care.",
-            subtitle: "Join our community of loving pet parents",
+            title: "One Adoption Changes Two Lives",
+            subtitle: "Adopt and change two lives yours and theirs",
+            description: "Start your journey with PawMart today",
+            image: "https://i.pinimg.com/1200x/70/ff/9b/70ff9beb5f0d37e6822d4868a9eaf247.jpg",
         },
     ];
 
     return (
-        <div className="w-full max-w-full px-4 py-8 md:py-12">
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl 
-              h-[280px] sm:h-[380px] md:h-[520px] lg:h-[580px]
-              bg-gradient-to-br from-pink-50 to-rose-50">
-
+        <div className="w-11/12 mx-auto py-8 md:py-12 lg:py-16">
+            <div className="relative rounded-3xl overflow-hidden shadow-sm bg-gradient-to-br from-pink-50 via-rose-50 to-pink-100">
                 <Slider {...settings}>
                     {slides.map((slide, index) => (
-                        <div key={index} className="relative h-[280px] sm:h-[380px] md:h-[520px] lg:h-[580px]">
-                            <div
-                                className="absolute bg-cover inset-0 bg-no-repeat"
-                                style={{ backgroundImage: `url(${slide.img})` }}
-                            >
-                                <div className="absolute inset-0 bg-black/40 md:bg-black/40 bg-black/20"></div>
-                            </div>
-                            <div className="relative h-full flex flex-col justify-center items-center px-6 md:px-16 text-center">
-                                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-white drop-shadow-2xl leading-tight">
-                                    {slide.title}
-                                </h1>
-                                <p className="mt-4 text-sm sm:text-base md:text-lg lg:text-xl text-pink-100 max-w-2xl">
-                                    {slide.subtitle}
-                                </p>
-                                <div className="mt-8">
-                                    <Link to={'/pets-supplies'}
-                                        className="inline-block px-5 py-2 md:px-8 md:py-4 my-btn font-bold text-base sm:text-lg rounded-2xl shadow-2xl"
-                                    >
-                                        Explore Pets Now
-                                    </Link>
+                        <div key={index}>
+                            <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[500px] lg:min-h-[600px]">
+                                <div className="flex flex-col justify-center items-center lg:items-start text-center lg:text-left px-2 md:px-12 lg:px-16 py-4 md:py-10">
+                                    <div>
+                                        <h1 className="text-2xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight">
+                                            {slide.title}
+                                        </h1>
+                                        <p className="mt-4 text-sm md:text-2xl font-semibold text-pink-700">
+                                            {slide.subtitle}
+                                        </p>
+                                        <p className="mt-3 text-sm text-gray-600 max-w-md">
+                                            {slide.description}
+                                        </p>
+                                    </div>
+
+                                    <div className="mt-8">
+                                        <Link
+                                            to="/pets-supplies"
+                                            className="inline-block px-3 py-3 md:px-8 md:py-4 my-btn font-bold md:text-lg rounded-sm shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+                                        >
+                                            <button>Explore More</button>
+                                        </Link>
+                                    </div>
                                 </div>
+                                <div className="flex items-center justify-center px-2 py-4 lg:p-12">
+                                    <div className="relative">
+                                        <div className="absolute inset-0 bg-pink-300 rounded-full blur-3xl opacity-30 scale-125 -z-10"></div>
+                                        <img
+                                            src={slide.image}
+                                            alt="Happy pet owner"
+                                            className="w-full  h-[250px] md:h-[420px] lg:h-[500px] object-cover border-8
+                                            border-pink-200/50 rounded-4xl drop-shadow-2xl"
+                                        />
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     ))}
