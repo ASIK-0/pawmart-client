@@ -49,6 +49,7 @@ const Navbar = () => {
                             <img
                                 className='rounded-full w-[40px] h-[40px] border-2 border-pink-300 object-cover'
                                 src={user.photoURL  ? user.photoURL : "https://img.icons8.com/?size=80&id=2zQuuMM0XuM9&format=png"}
+                                referrerPolicy="no-referrer"
                                 alt='profile'
                             />
                         )

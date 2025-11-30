@@ -81,6 +81,8 @@ const Login = () => {
                                     className="input input-bordered w-full focus:outline-none focus:ring-2 focus:ring-pink-400"
                                 />
                             </div>
+                            <div>
+                            </div>
 
                             <br />
                             <button type="submit" className="w-full my-btn rounded-lg font-medium py-2">
