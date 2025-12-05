@@ -48,7 +48,7 @@ const PetsSupplies = () => {
         return matchCategory && matchSearch;
     })
     return (
-        <div className='w-11/13 mx-auto'>
+        <div className='w-11/12 mx-auto'>
             <div className=" text-center my-8">
                 <h1 className="text-4xl md:text-6xl font-bold text-pink-600 mb-4">
                     Pets & Supplies

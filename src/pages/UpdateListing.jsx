@@ -1,25 +1,32 @@
-import React, { use, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
+import { User } from 'lucide-react';
+import { useNavigate, useParams } from 'react-router';
+import axios from 'axios';
 import LoadingSpinner from '../components/LoadingSpinner';
 import toast from 'react-hot-toast';
-import { Link, useNavigate } from 'react-router';
 
-const AddListing = () => {
+const UpdateListing = () => {
     const { user, loading } = use(AuthContext)
-    const navigate = useNavigate();
+    const { id } = useParams()
+    const [listing, setListing] = useState()
+    const navigation = useNavigate()
 
-    const [formData, setFormData] = useState({ category: 'Pets', price: 0 });
+    useEffect(() => {
+        axios.get(`http://localhost:3000/products/${id}`)
+            .then(res => {
+                const data = res.data.result;
+                setListing({
+                    ...data,
+                    category: data.category || "Pets",
+                    price: data.category === "Pets" ? 0 : (data.price || "")
+                });
+            })
+    }, [id])
 
-    const handleCategoryChange = (e) => {
-        const updatedCategory = e.target.value;
-        setFormData({ category: updatedCategory, price: updatedCategory == "Pets" ? 0 : '' })
-    };
+    console.log(listing)
 
-    const handlePriceChange = (e) => {
-        setFormData({ price: e.target.value });
-    };
-
-    const handleSubmit = (e) => {
+    const handleUpdate = (e) => {
         e.preventDefault()
 
         const listngFormData = {
@@ -29,30 +36,34 @@ const AddListing = () => {
             location: e.target.location.value,
             description: e.target.description.value,
             image: e.target.image.value,
-            email: user.email,
-            date: e.target.date.value
-
+            date: e.target.date.value,
+            email: user.email
         }
-        fetch('http://localhost:3000/products', {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(listngFormData)
-        })
-            .then(res => res.json())
-            .then(data => {
-                toast.success("Your Product added successfully");
-                navigate("/pets-supplies");
-                console.log(data)
+
+        axios.put(`http://localhost:3000/update/${id}`, listngFormData)
+            .then(res => {
+                console.log(res.data);
+                toast.success('Update Successfull')
+                navigation('/my-listings')
             })
             .catch(err => {
                 console.log(err)
             })
-
     }
+    const handleCategoryChange = (e) => {
+        const updatedCategory = e.target.value;
+        setListing(prev => ({
+            ...prev,
+            category: updatedCategory,
+            price: updatedCategory === "Pets" ? 0 : ""
+        }))
+    };
 
-    if (loading) {
+    const handlePriceChange = (e) => {
+        setListing(prev => ({ ...prev, price: e.target.value }));
+    };
+
+    if (loading || !listing) {
         return <LoadingSpinner />
     }
 
@@ -61,11 +72,11 @@ const AddListing = () => {
             <div className="w-11/12 max-w-2xl mx-auto py-16">
                 <div className="mb-10 border border-pink-200 rounded-2xl shadow-xl p-8 space-y-6">
                     <div className='text-center'>
-                        <h1 className="text-3xl md:text-5xl font-bold text-pink-600 mb-4">Create Listing</h1>
+                        <h1 className="text-3xl md:text-5xl font-bold text-pink-600 mb-4">Update Listing</h1>
                         <p className="text-md text-gray-600">Share your pet for adoption or sell pet products</p>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="">
+                    <form onSubmit={handleUpdate} className="">
                         <div>
                             <label className="block text-lg font-semibold text-gray-700 mb-2">
                                 Pet / Product Name
@@ -73,6 +84,7 @@ const AddListing = () => {
                             <input
                                 type="text"
                                 name="name"
+                                defaultValue={listing?.name}
                                 required
                                 className="w-full px-5 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none"
                                 placeholder="e.g. Golden Retriever Puppy or Royal Canin 4kg"
@@ -84,6 +96,7 @@ const AddListing = () => {
                             </label>
                             <select
                                 name="category"
+                                value={listing?.category}
                                 required
                                 onChange={handleCategoryChange}
                                 className="w-full px-5 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none"
@@ -102,15 +115,15 @@ const AddListing = () => {
                                 type="number"
                                 name="price"
                                 required
-                                value={formData.price}
+                                value={listing?.price}
                                 onChange={handlePriceChange}
-                                disabled={formData.category === "Pets"}
-                                className={`w-full px-5 py-3 border-2 rounded-xl focus:outline-none ${formData.category === "Pets"
+                                disabled={listing.category === "Pets"}
+                                className={`w-full px-5 py-3 border-2 rounded-xl focus:outline-none ${listing.category === "Pets"
                                     ? "bg-gray-100 text-gray-500 cursor-not-allowed"
                                     : "border-gray-300 focus:border-pink-500"
                                     }`}
                             />
-                            {formData.category === "Pets" && (
+                            {listing.category === "Pets" && (
                                 <p className="text-sm text-green-600 mt-2">Adoption is always free</p>
                             )}
                         </div>
@@ -122,6 +135,7 @@ const AddListing = () => {
                             <input
                                 type="text"
                                 name="location"
+                                defaultValue={listing?.location}
                                 required
                                 className="w-full px-5 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none"
                                 placeholder="e.g. Dhaka, Chattogram, Sylhet"
@@ -133,6 +147,7 @@ const AddListing = () => {
                             </label>
                             <textarea
                                 name="description"
+                                defaultValue={listing?.description}
                                 rows="4"
                                 required
                                 className="w-full px-5 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none"
@@ -147,6 +162,7 @@ const AddListing = () => {
                             <input
                                 type="url"
                                 name="image"
+                                defaultValue={listing?.image}
                                 required
                                 className="w-full px-5 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none"
                                 placeholder="https://images.unsplash.com/..."
@@ -162,6 +178,7 @@ const AddListing = () => {
                             <input
                                 type="date"
                                 name="date"
+                                defaultValue={listing?.date}
                                 required
                                 className="w-full px-5 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none"
                             />
@@ -177,7 +194,7 @@ const AddListing = () => {
                                 className="w-full px-5 py-3 bg-gray-100 border-2 border-gray-300 rounded-xl text-gray-700"
                             />
                         </div>
-                        <button type='submit' className='w-full font-bold  px-5 py-3 my-btn my-3 rounded-xl'>Submit</button>
+                        <button type='submit' className='w-full font-bold  px-5 py-3 my-btn my-3 rounded-xl'>Update</button>
                     </form>
                 </div>
 
@@ -187,4 +204,4 @@ const AddListing = () => {
     );
 };
 
-export default AddListing;
+export default UpdateListing;

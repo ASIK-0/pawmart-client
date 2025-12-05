@@ -11,7 +11,7 @@ const ListingCard = ({ product }) => {
 
             <div className="relative  overflow-hidden p-5">
 
-                <div className='h-[380px]'>
+                <div className='h-[380px] lg:h-[450px]'>
                     <img
                         src={product.image}
                         alt={product.name}

@@ -18,6 +18,8 @@ import { Toaster } from 'react-hot-toast';
 import PrivateRoute from './contexts/PrivateRoute.jsx';
 import ListingDetails from './pages/ListingDetails.jsx';
 import CategoryFilteredProducts from './pages/CategoryFilteredProducts.jsx';
+import UpdateService from './pages/UpdateListing.jsx';
+import UpdateListing from './pages/UpdateListing.jsx';
 
 
 const router = createBrowserRouter([
@@ -45,9 +47,15 @@ const router = createBrowserRouter([
       },
       {
         path: "/my-listings",
-        Component: MyListings,
-        loader: () => fetch('http://localhost:3000/products')
+        element: <PrivateRoute>
+          <MyListings/>
+        </PrivateRoute>
       },
+      {
+        path: "/update-listings/:id",
+        element: <UpdateListing></UpdateListing>
+      },
+
       {
         path: "/listingDetails/:id",
         element: (
