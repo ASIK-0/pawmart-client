@@ -17,6 +17,7 @@ import AuthProvider from './contexts/AuthProvider.jsx';
 import { Toaster } from 'react-hot-toast';
 import PrivateRoute from './contexts/PrivateRoute.jsx';
 import ListingDetails from './pages/ListingDetails.jsx';
+import CategoryFilteredProducts from './pages/CategoryFilteredProducts.jsx';
 
 
 const router = createBrowserRouter([
@@ -30,24 +31,30 @@ const router = createBrowserRouter([
       },
       {
         path: "/pets-supplies",
-        element: <PetsSupplies />,
-        loader: () => fetch('http://localhost:3000/products')
+        element: <PetsSupplies />
+      },
+      {
+        path: "/category-filtered-product/:category",
+        element: <CategoryFilteredProducts />
       },
       {
         path: "/add-listing",
         element: <PrivateRoute>
-            <AddListing />
-          </PrivateRoute>
+          <AddListing />
+        </PrivateRoute>
       },
       {
         path: "/my-listings",
-        Component: MyListings
+        Component: MyListings,
+        loader: () => fetch('http://localhost:3000/products')
       },
       {
-        path: "/listingDetails/:_id",
-        element: <PrivateRoute>
-          <ListingDetails/>
-        </PrivateRoute>
+        path: "/listingDetails/:id",
+        element: (
+          <PrivateRoute>
+            <ListingDetails />
+          </PrivateRoute>
+        )
       },
       {
         path: "/my-orders",

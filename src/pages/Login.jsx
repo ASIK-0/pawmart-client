@@ -53,7 +53,7 @@ const Login = () => {
                         </p>
                     </div>
 
-                    <div className="md:w-1/2 max-w-lg backdrop-blur-lg  border border-pink-300/50 shadow-2xl rounded-2xl p-8">
+                    <div className="lg:w-1/2 max-w-lg backdrop-blur-lg  border border-pink-300/50 shadow-2xl rounded-2xl p-8">
                         <form onSubmit={handleSignin} className="space-y-5">
                             <h2 className="text-4xl font-bold text-pink-600 mb-2 text-center">
                                 Login

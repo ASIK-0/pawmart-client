@@ -1,9 +1,13 @@
 import React, { use, useState } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
 import LoadingSpinner from '../components/LoadingSpinner';
+import toast from 'react-hot-toast';
+import { Link, useNavigate } from 'react-router';
 
 const AddListing = () => {
     const { user, loading } = use(AuthContext)
+    const navigate = useNavigate();
+
     const [formData, setFormData] = useState({ category: 'Pets', price: 0 });
 
     const handleCategoryChange = (e) => {
@@ -30,21 +34,23 @@ const AddListing = () => {
             date: e.target.date.value
 
         }
-        console.log(listngFormData)
         fetch('http://localhost:3000/products', {
             method: "POST",
             headers: {
-                "Content-Type" : "application/json"
+                "Content-Type": "application/json"
             },
-            body:JSON.stringify(listngFormData)
+            body: JSON.stringify(listngFormData)
         })
-        .then(res => res.json())
-        .then(data => {
-            console.log(data)
-        })
-        .catch(err => {
-            console.log(err)
-        })
+            .then(res => res.json())
+            .then(data => {
+                toast.success("Your Product added successfully");
+                navigate("/pets-supplies");
+                console.log(data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+
     }
 
     if (loading) {
@@ -79,6 +85,7 @@ const AddListing = () => {
                             </label>
                             <select
                                 name="category"
+                                required
                                 onChange={handleCategoryChange}
                                 className="w-full px-5 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none"
                             >
@@ -141,6 +148,7 @@ const AddListing = () => {
                             <input
                                 type="url"
                                 name="image"
+                                required
                                 className="w-full px-5 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none"
                                 placeholder="https://images.unsplash.com/..."
                             />

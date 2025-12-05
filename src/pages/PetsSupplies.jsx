@@ -1,43 +1,54 @@
 import React, { use, useEffect, useState } from 'react';
-import { useLoaderData } from 'react-router';
 import ListingCard from '../components/ListingCard';
 import { AuthContext } from '../contexts/AuthContext';
 import LoadingSpinner from '../components/LoadingSpinner';
+import axios from 'axios';
+import { Link } from 'react-router';
+import SearchingSpinner from '../components/SearchingSpinner';
 
 const PetsSupplies = () => {
-    const data = useLoaderData()
-    console.log(data)
 
-    const [search, setSeach] = useState('')
+    const [data, setData] = useState([])
+    const [search, setSearch] = useState('')
+    const [searchLoading, setSearchLoading] = useState(false)
     const [category, setCategory] = useState('');
-
     const { loading } = use(AuthContext)
 
-    
+    useEffect(() => {
+        axios.get('http://localhost:3000/products')
+            .then(res => {
+                setData(res.data)
+                console.log(res.data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }, [])
+
     useEffect(() => {
         if (search) {
-            // setSearchLoading(true);
+            setSearchLoading(true);
             const timer = setTimeout(() => {
-                // setSearchLoading(false);
+                setSearchLoading(false);
             }, 500);
             return () => clearTimeout(timer);
         } else {
-            // setSearchLoading(false)
+            setSearchLoading(false)
         }
     }, [search]);
-    if ( loading ) {
-       return <LoadingSpinner></LoadingSpinner>
+
+    if (loading) {
+        return <LoadingSpinner></LoadingSpinner>
     };
 
     const term = search.trim().toLocaleLowerCase()
-    const filteredData = data.filter(product => {
+    const filteredData = data?.filter(product => {
         const matchSearch = product.name?.toLocaleLowerCase().includes(term);
         const matchCategory = category === '' ? true : product.category === category;
         return matchCategory && matchSearch;
     })
-
     return (
-        <div className='w-11/12 mx-auto'>
+        <div className='w-11/13 mx-auto'>
             <div className=" text-center my-8">
                 <h1 className="text-4xl md:text-6xl font-bold text-pink-600 mb-4">
                     Pets & Supplies
@@ -75,16 +86,27 @@ const PetsSupplies = () => {
                                     <path d="m21 21-4.3-4.3"></path>
                                 </g>
                             </svg>
-                            <input type="search" value={search} onChange={(e) => setSeach(e.target.value)} required placeholder="Search" />
+                            <input type="search" value={search} onChange={(e) => setSearch(e.target.value)} required placeholder="Search" />
                         </label>
                     </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-[40px]">
-                    {
-                        filteredData.map(product => <ListingCard key={product._id} product={product} />)
-                    }
+                    {searchLoading ? (
+                        <div className="col-span-full justify-items-center my-50 flex justify-center">
+                            <SearchingSpinner></SearchingSpinner>
+                        </div>
+                    ) : (
+                        filteredData?.map(product => (
+                            <ListingCard key={product._id} product={product} />
+                        )) 
+                    )}
                 </div>
 
+                <div>
+                    <Link to={'/'} className="mb-8 text-pink-600 hover:text-pink-700 font-semibold flex items-center gap-2 text-lg">
+                        ← Back to Home
+                    </Link>
+                </div>
             </div>
         </div>
     );

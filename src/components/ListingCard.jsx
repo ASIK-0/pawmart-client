@@ -1,5 +1,5 @@
 import React from 'react';
-import { BiHeart, BiMapPin, BiShoppingBag, BiSolidShoppingBag } from 'react-icons/bi';
+import { BiHeart, BiMapPin, BiSolidShoppingBag } from 'react-icons/bi';
 import { Link } from 'react-router';
 
 const ListingCard = ({ product }) => {
@@ -7,15 +7,15 @@ const ListingCard = ({ product }) => {
     const isAdoption = product.category == "Pets";
     const priceText = isAdoption ? "Free Adoption" : `${product.Price}`;
     return (
-        <div className="group relative bg-pink-50 rounded-2xl shadow-md hover:shadow-2xl transition-all duration-400 overflow-hidden max-w-130 cursor-pointer">
+        <div className="group relative bg-pink-50 rounded-2xl shadow-md hover:shadow-2xl transition-all duration-400 overflow-hidden cursor-pointer">
 
             <div className="relative  overflow-hidden p-5">
 
-                <div className='h-[340px]'>
+                <div className='h-[380px]'>
                     <img
                         src={product.image}
                         alt={product.name}
-                        className="w-full h-full  rounded-sm border border-pink-300  group-hover:scale-110 transition-transform duration-800"
+                        className="w-full h-full rounded-sm border border-pink-300  group-hover:scale-110 transition-transform duration-800"
                     />
                 </div>
                 <div className={`absolute top-7 left-6 px-4 py-1.5 rounded-full text-white text-sm font-semibold animate-pulse shadow-lg ${product.category === "Pets" ? "bg-pink-500" :
@@ -47,7 +47,7 @@ const ListingCard = ({ product }) => {
                     {isAdoption && <BiHeart className="text-pink-500 fill-pink-500" size={28} />}
                     {!isAdoption && <BiSolidShoppingBag className="text-gray-400" size={24} />}
                 </div>
-                <Link to={`/listingDetails/${product._id}`}
+                <Link to={`/listingDetails/${product?._id}`}
                     onClick={''}
                     className="mt-5 block w-full text-center my-btn font-bold py-3.5 rounded-xl"
                 >

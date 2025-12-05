@@ -1,9 +1,189 @@
-import React from 'react';
+import axios from 'axios';
+import React, { use, useEffect, useState } from 'react';
+import { AuthContext } from '../contexts/AuthContext';
+import { Link } from 'react-router';
 
 const MyListings = () => {
+
+    const [myListing, setMyListing] = useState([]);
+    const { user } = use(AuthContext)
+
+    useEffect(() => {
+        axios.get(`http://localhost:3000/my-listings?email=${user?.email}`)
+            .then(res => {
+                setMyListing(res.data)
+                console.log(res.data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }, [user?.email])
+
+    console.log(myListing)
+
     return (
-        <div>
-            
+        <div className="w-11/12 max-w-7xl mx-auto my-10 md:my-16">
+            {/* Header */}
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-10">
+                <div>
+                    <h1 className="text-3xl md:text-5xl font-bold text-pink-600">
+                        My Listings
+                    </h1>
+                    <p className="text-gray-600 mt-2 text-sm md:text-lg">
+                        Manage your adorable pets & products ({myListing.length} {myListing.length === 1 ? 'post' : 'posts'})
+                    </p>
+                </div>
+                <Link to="/add-listing">
+                    <button className="my-btn px-6 py-4 rounded-2xl  flex items-center gap-3 font-bold text-sm md:text-xl">Add New Listing
+                    </button>
+                </Link>
+            </div>
+
+            {/* Desktop Table - Hidden on Mobile */}
+            <div className="hidden md:block rounded-3xl shadow-xl overflow-hidden border border-pink-300">
+                <div className="overflow-x-hidden">
+                    <table className="table w-full">
+                        <thead>
+                            <tr className="bg-pink-200">
+                                <th className="text-left py-6 px-6 font-bold text-lg">Product</th>
+                                <th className="text-left py-6 px-6 font-bold text-lg">Description</th>
+                                <th className="text-left py-6 px-6 font-bold text-lg">Category</th>
+                                <th className="text-left py-6 px-6 font-bold text-lg">Price</th>
+                                <th className="text-center py-6 px-6 font-bold text-lg">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {myListing.length === 0 ? (
+                                <tr>
+                                    <td colSpan="5" className="text-center py-20">
+                                        <div className="flex flex-col items-center">
+                                            {/* add korbo akta no listing image */}
+                                            <p className="text-4xl font-semibold text-gray-500">Aww, it’s empty here!</p>
+                                            <p className="text-gray-400 mt-2">Bring your pets & products to life 🐾</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ) : (
+                                myListing.map(listing => (
+                                    <tr
+                                        key={listing._id}
+                                        className={'hover:bg-pink-50 transition-all duration-300 border-b border-pink-100'}
+                                    >
+                                        <td className="py-6 px-6">
+                                            <div className="flex items-center gap-4">
+                                                <div className="">
+                                                    <div>
+                                                        <img src={listing.image} alt={listing.name} className="h-16 w-16 rounded-2xl border border-pink-400" />
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <div className="font-bold text-lg text-gray-800">{listing.name}</div>
+                                                    <div className="text-sm text-gray-500">Posted {listing.date}</div>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td className="py-6 px-6">
+                                            <p className="text-gray-600">
+                                                {listing.description || "No description added"}
+                                            </p>
+                                        </td>
+
+                                        <td className="py-6 px-6">
+                                            <span
+                                                className={`w-38 inline-block text-center px-4 py-2 rounded-full text-white font-bold text-sm shadow-md  
+                                                    ${listing.category === "Pets"
+                                                        ? "bg-pink-500"
+                                                        : listing.category === "Pet Food"
+                                                            ? "bg-amber-500"
+                                                            : listing.category === "Accessories"
+                                                                ? "bg-purple-500"
+                                                                : "bg-teal-500"}`}
+                                            >
+                                                {listing.category}
+                                            </span>
+                                        </td>
+
+
+                                        <td className="py-6 px-6">
+                                            {listing.price === 0 ? (
+                                                <span className="text-2xl font-bold text-green-600 flex items-center gap-2">
+                                                    Free Adoption
+                                                </span>
+                                            ) : (
+                                                <span className="text-2xl font-bold text-pink-600">৳{listing.price}</span>
+                                            )}
+                                        </td>
+
+                                        <td className="py-6 px-6 text-center">
+                                            <div className="flex justify-center gap-3">
+                                                <button className="btn bg-blue-500 hover:bg-blue-600 text-white rounded-xl shadow-lg transform hover:scale-110 transition">
+                                                    Edit
+                                                </button>
+                                                <button className="btn bg-red-500 hover:bg-red-600 text-white rounded-xl shadow-lg transform hover:scale-110 transition">
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            {/* Mobile Card View - Only Visible on Mobile */}
+            <div className="block md:hidden space-y-6">
+                {myListing.length === 0 ? (
+                    <div className="text-center py-20 bg-white rounded-3xl shadow-xl border border-pink-100">
+                        <div className="bg-gray-200 border-2 border-dashed rounded-xl w-32 h-32 mx-auto mb-6" />
+                        <p className="text-2xl font-semibold text-gray-500">No listings yet!</p>
+                        <p className="text-gray-400 mt-2">Start adding your pets or products</p>
+                    </div>
+                ) : (
+                    myListing.map(listing => (
+                        <div key={listing._id} className="bg-white rounded-3xl shadow-2xl p-6 border-2 border-pink-100">
+                            <div className="flex gap-5">
+                                <img
+                                    src={listing.image || "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=400"}
+                                    alt={listing.name}
+                                    className="w-28 h-28 rounded-2xl object-cover ring-4 ring-pink-200"
+                                />
+                                <div className="flex-1">
+                                    <h3 className="text-xl font-bold text-gray-800">{listing.name}</h3>
+                                    <span className={`inline-block px-4 py-2 rounded-full text-white text-xs font-bold mt-2 ${listing.category === "Pets" ? "bg-pink-500" :
+                                        listing.category === "Pet Food" ? "bg-amber-500" :
+                                            listing.category === "Accessories" ? "bg-purple-500" : "bg-teal-500"
+                                        }`}>
+                                        {listing.category}
+                                    </span>
+                                    <p className="text-lg font-bold mt-3">
+                                        {listing.price === 0 ?
+                                            <span className="text-green-600 flex items-center gap-2">
+                                                Free Adoption
+                                            </span> :
+                                            <span className="text-pink-600">৳{listing.price}</span>
+                                        }
+                                    </p>
+                                    <p className="text-sm text-gray-500 mt-2 line-clamp-2">
+                                        {listing.description || "No description"}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="mt-6 flex gap-3">
+                                <button className="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-xl shadow-lg transform hover:scale-105 transition">
+                                    Edit
+                                </button>
+                                <button className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold py-3 rounded-xl shadow-lg transform hover:scale-105 transition">
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    ))
+                )}
+            </div>
         </div>
     );
 };
