@@ -60,7 +60,7 @@ const RotatingCardCarousel = ({ products = [] }) => {
                                     style={{
                                         backgroundImage: product
                                             ? `url(${product.image})`
-                                            : `ur[](https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=600)`,
+                                            : '',
                                     }}
                                 >
                                     {product && (
@@ -81,8 +81,8 @@ const RotatingCardCarousel = ({ products = [] }) => {
                 <div className="mobile-scroll">
                     {duplicatedItems.map((product, index) => (
                         <Link
-                            key={`${product?._id || "dummy"}-${index}`}
-                            to={product ? `/listingDetails/${product?._id}` : "#"}
+                            key={`${product?._id}-${index}`}
+                            to={product ? `/listingDetails/${product?._id}` : ""}
                             className="mobile-card"
                         >
                             <div
@@ -90,7 +90,7 @@ const RotatingCardCarousel = ({ products = [] }) => {
                                 style={{
                                     backgroundImage: product
                                         ? `url(${product.image})`
-                                        : `ur[](https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=600)`,
+                                        : '',
                                 }}
                             />
                             <div className="mobile-info">

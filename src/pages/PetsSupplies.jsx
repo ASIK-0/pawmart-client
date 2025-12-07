@@ -10,7 +10,7 @@ const PetsSupplies = () => {
 
     const [data, setData] = useState([])
     const [search, setSearch] = useState('')
-    const [searchLoading, setSearchLoading] = useState(false)
+    const [searchLoading, setSearchLoading] = useState(true)
     const [category, setCategory] = useState('');
     const { loading } = use(AuthContext)
 
@@ -30,7 +30,7 @@ const PetsSupplies = () => {
             setSearchLoading(true);
             const timer = setTimeout(() => {
                 setSearchLoading(false);
-            }, 500);
+            }, 2000);
             return () => clearTimeout(timer);
         } else {
             setSearchLoading(false)

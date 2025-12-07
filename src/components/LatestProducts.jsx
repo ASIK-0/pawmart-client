@@ -20,10 +20,10 @@ const LatestProducts = () => {
     return (
         <div>
             <div className="text-center mb-10">
-                <h2 className="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-300 to-pink-600">
+                <h2 className="text-3xl md:text-6xl font-bold text-pink-600">
                     Featured Pets & Products
                 </h2>
-                <p className="mt-4 text-2xl">
+                <p className="mt-4 text-xl  md:text-2xl">
                     Watch our latest additions in stunning 3D
                 </p>
             </div>

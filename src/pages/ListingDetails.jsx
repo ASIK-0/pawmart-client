@@ -4,12 +4,14 @@ import { MapPin, Calendar, Mail, Heart, ShoppingBag } from 'lucide-react';
 import axios from 'axios';
 import { AuthContext } from '../contexts/AuthContext';
 import LoadingSpinner from '../components/LoadingSpinner';
+import Swal from 'sweetalert2';
 
 const ListingDetails = () => {
 
     const { id } = useParams()
     const [product, setProduct] = useState(null)
-    const { loading} = use(AuthContext)
+    const [quantity, setQuantity] = useState(1);
+    const { user, loading } = use(AuthContext)
 
     useEffect(() => {
         axios.get(`http://localhost:3000/products/${id}`)
@@ -27,6 +29,39 @@ const ListingDetails = () => {
 
     const isAdoption = product?.category === "Pets";
 
+    const handleOrderSubmit = (e) => {
+        e.preventDefault();
+
+        const orderData = {
+            productId: product._id,
+            productName: product.name,
+            buyerName: user?.displayName || user?.name || "Guest User",
+            email: user?.email,
+            quantity: isAdoption ? 1 : Number(quantity),
+            price: isAdoption ? 0 : Number(product.Price),
+            address: e.target.address.value,
+            phone: e.target.phone.value,
+            date: new Date().toISOString().split("T")[0],
+            additionalNotes: e.target.notes.value,
+        };
+
+
+        axios.post('http://localhost:3000/orders', orderData)
+            .then(res => {
+                console.log(res)
+                Swal.fire({
+                    title: (isAdoption ? "Adoption request sent successfully!" : "Order placed successfully!"),
+                    icon: "success",
+                    draggable: true
+                });
+                e.target.reset()
+                setQuantity(1);
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        document.getElementById("my_modal_5").close();
+    };
     return (
         <div className="w-11/12 mx-auto py-8 mb-10 px-4">
             <div className="max-w-390 mx-auto">
@@ -46,7 +81,7 @@ const ListingDetails = () => {
                                 FREE ADOPTION
                             </div>
                         )}
-                    </div> 
+                    </div>
                     <div className="px-8 py-4 md:p-12 flex flex-col justify-between space-y-4">
                         <div>
                             <h1 className="text-3xl md:text-4xl font-extrabold text-gray-800 mb-4">
@@ -67,7 +102,7 @@ const ListingDetails = () => {
                             {isAdoption ? (
                                 <span className="text-green-600">Free Adoption</span>
                             ) : (
-                                <span className="text-pink-600">Price: {product.price}</span>
+                                <span className="text-pink-600">Price: {product.Price}</span>
                             )}
                         </div>
                         <div className="grid grid-cols-1 gap-2 text-lg">
@@ -105,7 +140,7 @@ const ListingDetails = () => {
                                 {product.description}
                             </p>
                         </div>
-                        <button className={`w-full py-4 rounded-2xl font-bold text-xl sm:text-2xl text-white shadow-2xl transform flex items-center justify-center gap-4 ${isAdoption
+                        <button onClick={() => document.getElementById('my_modal_5').showModal()} className={`w-full py-4 rounded-2xl font-bold text-xl sm:text-2xl text-white shadow-2xl transform flex items-center justify-center gap-4 ${isAdoption
                             ? "bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600"
                             : "bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700"
                             }`}>
@@ -114,6 +149,108 @@ const ListingDetails = () => {
                         </button>
                     </div>
                 </div>
+                {/* modal */}
+                <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
+                    <div className="modal-box mx-auto w-11/12 max-w-2xl">
+                        <form method="dialog">
+                            <button className="btn btn-xl btn-circle btn-ghost absolute right-4 top-4">✕</button>
+                        </form>
+
+                        <h3 className="text-3xl font-bold text-center mb-8 text-pink-600">
+                            {isAdoption ? "Adoption Request Form" : "Order Form"}
+                        </h3>
+
+                        <form onSubmit={handleOrderSubmit} className="space-y-3">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div>
+                                    <label className="block font-semibold text-gray-700 mb-1">Your Name</label>
+                                    <input type="text" value={user?.displayName || "Guest User"} readOnly className="input input-bordered  focus:border-pink-500 focus:outline-none w-full bg-gray-100" />
+                                </div>
+                                <div>
+                                    <label className="block font-semibold text-gray-700 mb-1">Email</label>
+                                    <input type="email" value={user?.email || ""} readOnly className="input input-bordered  focus:border-pink-500 focus:outline-none w-full bg-gray-100" />
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div>
+                                    <label className="block font-semibold text-gray-700 mb-1">Listing ID</label>
+                                    <input type="text" value={product?._id || ""} readOnly className="input input-bordered  focus:border-pink-500 focus:outline-none w-full bg-gray-100 text-sm" />
+                                </div>
+                                <div>
+                                    <label className="block font-semibold text-gray-700 mb-1">Product/Pet Name</label>
+                                    <input type="text" value={product?.name || ""} readOnly className="input input-bordered  focus:border-pink-500 focus:outline-none w-full bg-gray-100" />
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div>
+                                    <label className="block font-semibold text-gray-700 mb-1">Quantity</label>
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        value={isAdoption ? 1 : quantity}
+                                        onChange={(e) => !isAdoption && setQuantity(e.target.value)}
+                                        disabled={isAdoption}
+                                        className={`input input-bordered  focus:border-pink-500 focus:outline-none w-full ${isAdoption ? "bg-gray-200" : ""}`}
+                                    />
+                                    {isAdoption && <p className="text-sm text-gray-500 mt-1">Only 1 pet can be adopted</p>}
+                                </div>
+                                <div>
+                                    <label className="block font-semibold text-gray-700 mb-1">Price</label>
+                                    <input
+                                        type="text"
+                                        value={isAdoption ? "Free Adoption" : `${product?.Price}`}
+                                        readOnly
+                                        className="input input-bordered w-full bg-gray-100 font-bold text-pink-600  focus:border-pink-500 focus:outline-none"
+                                    />
+                                </div>
+                            </div>
+                            <div>
+                                <label className="block font-semibold text-gray-700 mb-1">
+                                    Delivery / Pickup Address <span className="text-red-500">*</span>
+                                </label>
+                                <textarea
+                                    required
+                                    rows="3"
+                                    name='address'
+                                    placeholder="Full address (House, Road, Area, Thana, District)"
+                                    className="textarea textarea-bordered w-full  focus:border-pink-500 focus:outline-none"
+                                />
+                            </div>
+                            <div>
+                                <label className="block font-semibold text-gray-700  mb-1">
+                                    Mobile Number <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="tel"
+                                    required
+                                    name='phone'
+                                    placeholder="017xxxxxxxx"
+                                    className="input input-bordered w-full  focus:border-pink-500 focus:outline-none"
+                                />
+                            </div>
+                            <div>
+                                <label className="block font-semibold text-gray-700 mb-1">Additional Notes (Optional)</label>
+                                <textarea
+                                    rows="3"
+                                    name='notes'
+                                    placeholder="Any special request, time, payment method, etc."
+                                    className="textarea textarea-bordered  focus:border-pink-500 focus:outline-none w-full"
+                                />
+                            </div>
+                            <div className="text-center mt-10">
+                                <button
+                                    type="submit"
+                                    className={`btn text-xl px-7 py-6 rounded-md shadow-pink-500 font-bold text-white ${isAdoption
+                                        ? "bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600"
+                                        : "bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700"
+                                        }`}
+                                >
+                                    {isAdoption ? "Send Adoption Request" : "Confirm Order"}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </dialog>
             </div>
         </div>
     );

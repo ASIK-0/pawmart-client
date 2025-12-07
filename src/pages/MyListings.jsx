@@ -2,6 +2,8 @@ import axios from 'axios';
 import React, { use, useEffect, useState } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
 import { Link } from 'react-router';
+import toast from 'react-hot-toast';
+import Swal from 'sweetalert2';
 
 const MyListings = () => {
 
@@ -19,7 +21,38 @@ const MyListings = () => {
             })
     }, [user?.email])
 
-    console.log(myListing)
+    const handleDelete = (id) => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`http://localhost:3000/delete/${id}`)
+                    .then(res => {
+                        console.log(res.data);
+                        const filterData = myListing.filter(listing => listing._id !== id);
+                        setMyListing(filterData);
+                        toast.success("Deleted successfully!");
+
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: "Your List has been deleted.",
+                            icon: "success"
+                        });
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        toast.error("Delete failed!");
+                    });
+            }
+        });
+    };
+
 
     return (
         <div className="w-11/12 max-w-7xl mx-auto my-10 md:my-16">
@@ -38,7 +71,7 @@ const MyListings = () => {
                 </Link>
             </div>
 
-            {/* Desktop Table */}
+            {/* Desktop*/}
             <div className="hidden md:block rounded-3xl shadow-xl overflow-hidden border border-pink-300">
                 <div className="overflow-x-hidden">
                     <table className="table w-full">
@@ -56,7 +89,6 @@ const MyListings = () => {
                                 <tr>
                                     <td colSpan="5" className="text-center py-20">
                                         <div className="flex flex-col items-center">
-                                            {/* add korbo akta no listing image */}
                                             <p className="text-4xl font-semibold text-gray-500">Aww, it’s empty here!</p>
                                             <p className="text-gray-400 mt-2">Bring your pets & products to life 🐾</p>
                                         </div>
@@ -109,7 +141,7 @@ const MyListings = () => {
                                                     Free Adoption
                                                 </span>
                                             ) : (
-                                                <span className="text-xl font-semibold text-pink-600">{listing.price}</span>
+                                                <span className="text-xl font-semibold text-pink-600">{listing.Price}</span>
                                             )}
                                         </td>
 
@@ -118,7 +150,7 @@ const MyListings = () => {
                                                 <Link to={`/update-listings/${listing?._id}`} className="btn bg-blue-500/85 hover:bg-blue-600 px-6 text-white rounded-md shadow-lg transform hover:scale-110 transition">
                                                     Edit
                                                 </Link>
-                                                <button className="btn bg-red-500/80 hover:bg-red-600 text-white rounded-md shadow-lg transform hover:scale-110 transition">
+                                                <button onClick={() => handleDelete(listing?._id)} className="btn bg-red-500/80 hover:bg-red-600 text-white rounded-md shadow-lg transform hover:scale-110 transition">
                                                     Delete
                                                 </button>
                                             </div>
@@ -131,7 +163,7 @@ const MyListings = () => {
                 </div>
             </div>
 
-            {/* Mobile  View  */}
+            {/* Mobile */}
             <div className="block md:hidden space-y-6">
                 {myListing.length === 0 ? (
                     <div className="text-center py-20 bg-white rounded-3xl shadow-xl border border-pink-100">
@@ -164,7 +196,7 @@ const MyListings = () => {
                                             <span className="text-pink-600">Price: {listing.price}</span>
                                         }
                                     </p>
-                                    
+
                                 </div>
                             </div>
 
@@ -172,7 +204,7 @@ const MyListings = () => {
                                 <button className="flex-1 bg-blue-500/80 hover:bg-blue-600 text-white font-bold py-3 rounded-md shadow-lg transform hover:scale-105 transition">
                                     Edit
                                 </button>
-                                <button className="flex-1 bg-red-500/80 hover:bg-red-600 text-white font-bold py-3 rounded-md shadow-lg transform hover:scale-105 transition">
+                                <button onClick={() => handleDelete(listing?._id)} className="flex-1 bg-red-500/80 hover:bg-red-600 text-white font-bold py-3 rounded-md shadow-lg transform hover:scale-105 transition">
                                     Delete
                                 </button>
                             </div>

@@ -48,12 +48,14 @@ const router = createBrowserRouter([
       {
         path: "/my-listings",
         element: <PrivateRoute>
-          <MyListings/>
+          <MyListings />
         </PrivateRoute>
       },
       {
         path: "/update-listings/:id",
-        element: <UpdateListing></UpdateListing>
+        element: <PrivateRoute>
+          <UpdateListing />
+        </PrivateRoute>
       },
 
       {
@@ -66,7 +68,9 @@ const router = createBrowserRouter([
       },
       {
         path: "/my-orders",
-        Component: MyOrders
+        element: <PrivateRoute>
+          <MyOrders/>
+        </PrivateRoute>
       },
       {
         path: "/login",
