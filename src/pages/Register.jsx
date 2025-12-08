@@ -1,13 +1,18 @@
-import React, { use, } from 'react';
+import React, { use, useEffect, } from 'react';
 import logo from '../assets/logo/paw (1).png';
 import { AuthContext } from '../contexts/AuthContext';
 import { Link, useNavigate } from 'react-router';
 
 import toast from 'react-hot-toast';
+import { Helmet } from 'react-helmet-async';
 
 const Register = () => {
     const { signInWithGoogle, createUser, setUser, updateInfo } = use(AuthContext)
     const navigate = useNavigate();
+
+    useEffect(() => {
+        document.title = "Register | PawMart";
+    }, []);
 
     const handleSignup = (e) => {
         e.preventDefault();
@@ -73,14 +78,14 @@ const Register = () => {
     };
 
     return (
-        <div className="min-h-[calc(100vh-20px)] flex items-center justify-center bg-pink-50 relative overflow-hidden">
+        <div className="min-h-[calc(100vh-20px)] flex items-center justify-center relative overflow-hidden">
             <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-10 md:gap-40 p-8 lg:p-10">
                 <div className="md:w-1/2 max-w-lg mx-auto text-center lg:text-left space-y-4">
                     <img className='w-40 mx-auto lg:mx-0' src={logo} alt="PetSpace Logo" />
                     <h1 className="text-4xl md:text-5xl font-extrabold text-pink-600 drop-shadow-lg">
                         Join Your Pet Space!
                     </h1>
-                    <p className="text-lg leading-relaxed mb-6 text-gray-700">
+                    <p className="text-lg leading-relaxed mb-6">
                         Create an account to connect with your furry friends and the pet community.
                     </p>
                 </div>
@@ -155,7 +160,7 @@ const Register = () => {
                             />
                             Continue with Google
                         </button>
-                        <p className="text-center text-sm text-gray-600 mt-6">
+                        <p className="text-center text-sm mt-6">
                             Already have an account?{" "}
                             <Link
                                 to="/login"

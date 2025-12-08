@@ -2,11 +2,20 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useParams } from 'react-router';
 import ListingCard from '../components/ListingCard';
+import { Helmet } from 'react-helmet-async';
 
 const CategoryFilteredProducts = () => {
     const { category } = useParams();
     const [products, setProducts] = useState([]);
 
+    const formatCategoryName = (cat) => {
+        if (!cat) return "Products";
+        return cat
+            .split('-')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
+    };
+    const pageTitle = `${formatCategoryName(category)} | PawMart`;
     useEffect(() => {
         axios.get(`http://localhost:3000/category-products/${category}`)
             .then(res => {
@@ -18,8 +27,11 @@ const CategoryFilteredProducts = () => {
     }, [category]);
 
     return (
-
         <div className='w-11/12 mx-auto'>
+            <Helmet >
+                <title>{pageTitle}</title>
+                <meta name="description" content={`Browse all ${formatCategoryName(category)} available for adoption or purchase at PawMart`} />
+            </Helmet>
             <div className=" text-center my-8">
                 <h1 className="text-4xl md:text-6xl font-bold text-pink-600 mb-4">
                     {category}
@@ -29,7 +41,7 @@ const CategoryFilteredProducts = () => {
                 </p>
             </div>
             <div className='flex justify-between'>
-            <h1 className='font-bold text-2xl md:text-5xl text-pink-600'>All Items : {products.length}</h1>
+                <h1 className='font-bold text-2xl md:text-5xl text-pink-600'>All Items : {products.length}</h1>
                 <Link to={'/'} className=" text-pink-600 hover:text-pink-700 font-semibold flex items-center gap-2 text-lg">
                     ← Back to Home
                 </Link>

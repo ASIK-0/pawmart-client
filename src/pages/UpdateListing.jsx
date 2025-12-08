@@ -1,7 +1,6 @@
 import React, { use, useEffect, useState } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
-import { User } from 'lucide-react';
-import { useNavigate, useParams } from 'react-router';
+import { Link, useNavigate, useParams } from 'react-router';
 import axios from 'axios';
 import LoadingSpinner from '../components/LoadingSpinner';
 import toast from 'react-hot-toast';
@@ -16,6 +15,7 @@ const UpdateListing = () => {
         axios.get(`http://localhost:3000/products/${id}`)
             .then(res => {
                 const data = res.data.result;
+                document.title = "Update List | PawMart";
                 setListing({
                     ...data,
                     category: data.category || "Pets",
@@ -69,7 +69,12 @@ const UpdateListing = () => {
 
     return (
         <div>
-            <div className="w-11/12 max-w-2xl mx-auto py-16">
+            <div className="w-11/12 max-w-2xl mx-auto py-10">
+                <div>
+                    <Link to={'/my-listings'} className="mb-8 text-pink-600 hover:text-pink-700 font-semibold flex items-center gap-2 text-lg">
+                        ← Back to Lisings
+                    </Link>
+                </div>
                 <div className="mb-10 border border-pink-200 rounded-2xl shadow-xl p-8 space-y-6">
                     <div className='text-center'>
                         <h1 className="text-3xl md:text-5xl font-bold text-pink-600 mb-4">Update Listing</h1>
@@ -91,21 +96,25 @@ const UpdateListing = () => {
                             />
                         </div>
                         <div>
-                            <label className="block text-lg font-semibold text-gray-700 mb-2">
+                            <label className="block text-lg font-semibold mb-2">
                                 Category
                             </label>
                             <select
                                 name="category"
-                                value={listing?.category}
                                 required
+                                value={listing?.category}
                                 onChange={handleCategoryChange}
-                                className="w-full px-5 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none"
+                                className="w-full px-5 py-3 border-2 rounded-xl focus:border-pink-500 focus:outline-none appearance-none cursor-pointer"
                             >
-                                <option value="Pets">Pets (Adoption - Free)</option>
-                                <option value="Pet Food">Pet Food</option>
-                                <option value="Accessories">Accessories</option>
-                                <option value="Pet Care Products">Pet Care Products</option>
+                                <div className='text-black'>
+                                    <option value="Pets">Pets (Adoption - Free)</option>
+                                    <option value="Pet Food">Pet Food</option>
+                                    <option value="Accessories">Accessories</option>
+                                    <option value="Pet Care Products">Pet Care Products</option>
+                                </div>
                             </select>
+
+
                         </div>
                         <div>
                             <label className="block text-lg font-semibold text-gray-700 mb-2">
@@ -119,7 +128,7 @@ const UpdateListing = () => {
                                 onChange={handlePriceChange}
                                 disabled={listing.category === "Pets"}
                                 className={`w-full px-5 py-3 border-2 rounded-xl focus:outline-none ${listing.category === "Pets"
-                                    ? "bg-gray-100 text-gray-500 cursor-not-allowed"
+                                    ? " text-gray-300 cursor-not-allowed"
                                     : "border-gray-300 focus:border-pink-500"
                                     }`}
                             />

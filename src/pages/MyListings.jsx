@@ -4,6 +4,7 @@ import { AuthContext } from '../contexts/AuthContext';
 import { Link } from 'react-router';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
+import { Helmet } from 'react-helmet-async';
 
 const MyListings = () => {
 
@@ -57,11 +58,15 @@ const MyListings = () => {
     return (
         <div className="w-11/12 max-w-7xl mx-auto my-10 md:my-16">
             <div className="flex sm:flex-row justify-between items-start sm:items-center gap-6 mb-10">
+                <Helmet>
+                    <title>My Listings | PawMart</title>
+                </Helmet>
+
                 <div>
                     <h1 className="text-2xl md:text-5xl font-bold text-pink-600">
                         My Listings
                     </h1>
-                    <p className="text-gray-600 mt-2 text-[8px] md:text-lg">
+                    <p className=" mt-2 text-[8px] md:text-lg">
                         Manage your adorable pets & products ({myListing.length} {myListing.length === 1 ? 'post' : 'posts'})
                     </p>
                 </div>
@@ -76,7 +81,7 @@ const MyListings = () => {
                 <div className="overflow-x-hidden">
                     <table className="table w-full">
                         <thead>
-                            <tr className="bg-pink-200">
+                            <tr className="bg-pink-400 text-white">
                                 <th className="text-left py-6 px-6 font-bold text-lg">Product</th>
                                 <th className="text-left py-6 px-6 font-bold text-lg">Description</th>
                                 <th className="text-left py-6 px-6 font-bold text-lg">Category</th>
@@ -98,7 +103,7 @@ const MyListings = () => {
                                 myListing.map(listing => (
                                     <tr
                                         key={listing._id}
-                                        className={'hover:bg-pink-50 transition-all duration-300 border-b border-pink-100'}
+                                        className={'hover:bg-pink-500/50 transition-all duration-300 border-b border-pink-100'}
                                     >
                                         <td className="py-6 px-6">
                                             <div className="flex items-center gap-4">
@@ -108,14 +113,14 @@ const MyListings = () => {
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <div className="font-bold  text-gray-800">{listing.name}</div>
+                                                    <div className="font-bold ">{listing.name}</div>
                                                     <div className="text-sm text-gray-500">Posted {listing.date}</div>
                                                 </div>
                                             </div>
                                         </td>
 
                                         <td className="py-6 px-6">
-                                            <p className="text-gray-600">
+                                            <p className="">
                                                 {listing.description || "No description added"}
                                             </p>
                                         </td>
@@ -166,7 +171,7 @@ const MyListings = () => {
             {/* Mobile */}
             <div className="block md:hidden space-y-6">
                 {myListing.length === 0 ? (
-                    <div className="text-center py-20 bg-white rounded-3xl shadow-xl border border-pink-100">
+                    <div className="text-center py-20 rounded-3xl shadow-xl border border-pink-100">
                         <div className="bg-gray-200 border-2 border-dashed rounded-xl w-32 h-32 mx-auto mb-6" />
                         <p className="text-2xl font-semibold text-gray-500">No listings yet!</p>
                         <p className="text-gray-400 mt-2">Start adding your pets or products</p>
@@ -181,7 +186,7 @@ const MyListings = () => {
                                     className="w-28 h-28 rounded-2xl object-cover border border-pink-300"
                                 />
                                 <div className="flex-1">
-                                    <h3 className="text-xl h-6 overflow-hidden font-bold text-gray-800">{listing?.name}</h3>
+                                    <h3 className="text-xl h-6 overflow-hidden font-bold">{listing?.name}</h3>
                                     <span className={`inline-block px-4 py-2 rounded-full text-white text-xs font-bold mt-2 ${listing.category === "Pets" ? "bg-pink-500" :
                                         listing.category === "Pet Food" ? "bg-amber-500" :
                                             listing.category === "Accessories" ? "bg-purple-500" : "bg-teal-500"
@@ -199,11 +204,10 @@ const MyListings = () => {
 
                                 </div>
                             </div>
-
                             <div className="mt-6 flex gap-3">
-                                <button className="flex-1 bg-blue-500/80 hover:bg-blue-600 text-white font-bold py-3 rounded-md shadow-lg transform hover:scale-105 transition">
+                                <Link to={`/update-listings/${listing?._id}`} className="flex-1 text-center bg-blue-500/80 hover:bg-blue-600 text-white font-bold py-3 rounded-md shadow-lg transform hover:scale-105 transition">
                                     Edit
-                                </button>
+                                </Link>
                                 <button onClick={() => handleDelete(listing?._id)} className="flex-1 bg-red-500/80 hover:bg-red-600 text-white font-bold py-3 rounded-md shadow-lg transform hover:scale-105 transition">
                                     Delete
                                 </button>
@@ -211,6 +215,11 @@ const MyListings = () => {
                         </div>
                     ))
                 )}
+            </div>
+            <div>
+                <Link to={'/'} className="my-13 text-pink-600 hover:text-pink-700 font-semibold flex items-center gap-2 text-lg">
+                    ← Back to Home
+                </Link>
             </div>
         </div>
     );

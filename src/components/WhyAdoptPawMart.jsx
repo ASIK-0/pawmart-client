@@ -1,14 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import AOS from "aos";
+import "aos/dist/aos.css"; 
 
 const WhyAdoptPawMart = () => {
+    useEffect(() => {
+    AOS.init({ duration: 1000 });
+  }, []);
     return (
         <div>
-            <section className="py-20">
+            <section  data-aos="fade-up" className="py-20">
                 <div className="max-w-6xl mx-auto px-6 text-center">
                     <h2 className="text-4xl md:text-5xl font-bold text-pink-600 mb-6">
                         Why Adopt from PawMart?
                     </h2>
-                    <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed mb-12">
+                    <p className="text-lg max-w-3xl mx-auto leading-relaxed mb-12">
                         Every pet deserves a loving home. When you adopt from us, you're not just bringing home a friend —
                         you're saving a life and fighting against puppy mills & unethical breeding.
                     </p>

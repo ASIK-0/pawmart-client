@@ -1,14 +1,19 @@
-import React, { use, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
 import LoadingSpinner from '../components/LoadingSpinner';
 import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router';
+import { Helmet } from 'react-helmet-async';
 
 const AddListing = () => {
     const { user, loading } = use(AuthContext)
     const navigate = useNavigate();
-
     const [formData, setFormData] = useState({ category: 'Pets', price: 0 });
+
+    useEffect(() => {
+        document.title = "Add listings | PawMart";
+    }, []);
+
 
     const handleCategoryChange = (e) => {
         const updatedCategory = e.target.value;
@@ -58,7 +63,13 @@ const AddListing = () => {
 
     return (
         <div>
-            <div className="w-11/12 max-w-2xl mx-auto py-16">
+            <div className="w-11/12 max-w-2xl mx-auto py-10">
+                <div>
+                    <Link to={'/'} className="mb-8 text-pink-600 hover:text-pink-700 font-semibold flex items-center gap-2 text-lg">
+                        ← Back to Home
+                    </Link>
+                </div>
+
                 <div className="mb-10 border border-pink-200 rounded-2xl shadow-xl p-8 space-y-6">
                     <div className='text-center'>
                         <h1 className="text-3xl md:text-5xl font-bold text-pink-600 mb-4">Create Listing</h1>
@@ -67,7 +78,7 @@ const AddListing = () => {
 
                     <form onSubmit={handleSubmit} className="">
                         <div>
-                            <label className="block text-lg font-semibold text-gray-700 mb-2">
+                            <label className="block text-lg font-semibold mb-2">
                                 Pet / Product Name
                             </label>
                             <input
@@ -79,23 +90,25 @@ const AddListing = () => {
                             />
                         </div>
                         <div>
-                            <label className="block text-lg font-semibold text-gray-700 mb-2">
+                            <label className="block text-lg font-semibold my-2">
                                 Category
                             </label>
                             <select
                                 name="category"
                                 required
                                 onChange={handleCategoryChange}
-                                className="w-full px-5 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none"
+                                className="w-full px-5 py-3 border-2 rounded-xl focus:border-pink-500 focus:outline-none appearance-none cursor-pointer"
                             >
-                                <option value="Pets">Pets (Adoption - Free)</option>
-                                <option value="Pet Food">Pet Food</option>
-                                <option value="Accessories">Accessories</option>
-                                <option value="Pet Care Products">Pet Care Products</option>
+                                <div className='text-black'>
+                                    <option value="Pets">Pets (Adoption - Free)</option>
+                                    <option value="Pet Food">Pet Food</option>
+                                    <option value="Accessories">Accessories</option>
+                                    <option value="Pet Care Products">Pet Care Products</option>
+                                </div>
                             </select>
                         </div>
                         <div>
-                            <label className="block text-lg font-semibold text-gray-700 mb-2">
+                            <label className="block text-lg font-semibold mb-2">
                                 Price (BDT)
                             </label>
                             <input
@@ -103,10 +116,11 @@ const AddListing = () => {
                                 name="price"
                                 required
                                 value={formData.price}
+                                placeholder='Your Product Price'
                                 onChange={handlePriceChange}
                                 disabled={formData.category === "Pets"}
                                 className={`w-full px-5 py-3 border-2 rounded-xl focus:outline-none ${formData.category === "Pets"
-                                    ? "bg-gray-100 text-gray-500 cursor-not-allowed"
+                                    ? " cursor-not-allowed"
                                     : "border-gray-300 focus:border-pink-500"
                                     }`}
                             />
@@ -116,7 +130,7 @@ const AddListing = () => {
                         </div>
 
                         <div>
-                            <label className="block text-lg font-semibold text-gray-700 mb-2">
+                            <label className="block text-lg font-semibold mb-2">
                                 Location
                             </label>
                             <input
@@ -128,7 +142,7 @@ const AddListing = () => {
                             />
                         </div>
                         <div>
-                            <label className="block text-lg font-semibold text-gray-700 mb-2">
+                            <label className="block text-lg font-semibold mb-2">
                                 Description
                             </label>
                             <textarea
@@ -141,7 +155,7 @@ const AddListing = () => {
                         </div>
 
                         <div>
-                            <label className="block text-lg font-semibold text-gray-700 mb-2">
+                            <label className="block text-lg font-semibold mb-2">
                                 Image URL
                             </label>
                             <input
@@ -153,7 +167,7 @@ const AddListing = () => {
                             />
                         </div>
                         <div>
-                            <label className="block text-lg font-semibold text-gray-700 mb-2">
+                            <label className="block text-lg font-semibold mb-2">
                                 Date
                             </label>
                             <input
@@ -164,7 +178,7 @@ const AddListing = () => {
                             />
                         </div>
                         <div>
-                            <label className="block text-lg font-semibold text-gray-700 mb-2">
+                            <label className="block text-lg font-semibold mb-2">
                                 Your Email (for contact)
                             </label>
                             <input

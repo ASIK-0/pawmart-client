@@ -10,18 +10,25 @@ const PetsSupplies = () => {
 
     const [data, setData] = useState([])
     const [search, setSearch] = useState('')
-    const [searchLoading, setSearchLoading] = useState(true)
+    const [searchLoading, setSearchLoading] = useState(false)
     const [category, setCategory] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
     const { loading } = use(AuthContext)
+    useEffect(() => {
+        document.title = "Pets & Supplies | PawMart";
+    }, []);
+
 
     useEffect(() => {
         axios.get('http://localhost:3000/products')
             .then(res => {
                 setData(res.data)
+                setIsLoading(false);
                 console.log(res.data)
             })
             .catch(err => {
                 console.log(err)
+                setIsLoading(false);
             })
     }, [])
 
@@ -33,11 +40,12 @@ const PetsSupplies = () => {
             }, 2000);
             return () => clearTimeout(timer);
         } else {
-            setSearchLoading(false)
+            setSearchLoading(false);
         }
     }, [search]);
 
-    if (loading) {
+
+    if (loading || isLoading) {
         return <LoadingSpinner></LoadingSpinner>
     };
 
@@ -95,10 +103,17 @@ const PetsSupplies = () => {
                         <div className="col-span-full justify-items-center my-50 flex justify-center">
                             <SearchingSpinner></SearchingSpinner>
                         </div>
+                    ) : filteredData.length === 0 ? (
+                        <div className="col-span-full text-center">
+                            <img className='mx-auto h-70'
+                                src="https://i.pinimg.com/1200x/69/70/45/697045f85ac832c9399e247b458577a1.jpg" alt="" />
+                            <h1 className='font-bold text-3xl sm:text-5xl mb-6 text-gray-400'>No Item Found</h1>
+                            <Link to={'/'} className='my-btn px-6 py-2'>Go Back</Link>
+                        </div>
                     ) : (
                         filteredData?.map(product => (
                             <ListingCard key={product._id} product={product} />
-                        )) 
+                        ))
                     )}
                 </div>
 

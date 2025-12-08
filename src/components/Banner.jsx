@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Link } from "react-router";
+
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const Banner = () => {
     const settings = {
@@ -46,8 +49,16 @@ const Banner = () => {
         },
     ];
 
+    useEffect(() => {
+    AOS.init({ duration: 1200,
+        easing: "ease-out-cubic",
+        offset: 100,
+     });
+  }, []);
+
     return (
-        <div className="w-11/12 mx-auto py-8 md:py-12 lg:py-16">
+        <div data-aos="fade-up"
+                data-aos-delay="100" className="w-11/12 mx-auto py-8 md:py-12 lg:py-16">
             <div className="relative rounded-3xl overflow-hidden shadow-sm bg-gradient-to-br from-pink-50 via-rose-50 to-pink-100">
                 <Slider {...settings}>
                     {slides.map((slide, index) => (

@@ -20,6 +20,8 @@ import ListingDetails from './pages/ListingDetails.jsx';
 import CategoryFilteredProducts from './pages/CategoryFilteredProducts.jsx';
 import UpdateService from './pages/UpdateListing.jsx';
 import UpdateListing from './pages/UpdateListing.jsx';
+import NotFound from './pages/NotFound.jsx';
+import { HelmetProvider } from 'react-helmet-async';
 
 
 const router = createBrowserRouter([
@@ -69,7 +71,7 @@ const router = createBrowserRouter([
       {
         path: "/my-orders",
         element: <PrivateRoute>
-          <MyOrders/>
+          <MyOrders />
         </PrivateRoute>
       },
       {
@@ -79,19 +81,25 @@ const router = createBrowserRouter([
       {
         path: "/register",
         Component: Register
-      },
-    ]
+      }
+    ],
   },
+  {
+    path: "*",
+    element: <NotFound />
+  }
 ]);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <AuthProvider>
-      <RouterProvider router={router} />
-      <Toaster
-        position="top-center"
-        reverseOrder={false}
-      />
-    </AuthProvider>
+    <HelmetProvider>
+      <AuthProvider>
+        <RouterProvider router={router} />
+        <Toaster
+          position="top-center"
+          reverseOrder={false}
+        />
+      </AuthProvider>
+    </HelmetProvider>
   </StrictMode>
 )

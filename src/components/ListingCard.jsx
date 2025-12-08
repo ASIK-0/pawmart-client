@@ -1,13 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BiHeart, BiMapPin, BiSolidShoppingBag } from 'react-icons/bi';
 import { Link } from 'react-router';
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const ListingCard = ({ product }) => {
 
     const isAdoption = product.category == "Pets";
     const priceText = isAdoption ? "Free Adoption" : `${product.Price}`;
+
+    useEffect(() => {
+    AOS.init({ duration: 1000 });
+  }, []);
     return (
-        <div className="group relative bg-pink-50 rounded-2xl shadow-md hover:shadow-2xl transition-all duration-400 overflow-hidden cursor-pointer">
+        <div data-aos="fade-up" className="group relative bg-pink-50 rounded-2xl shadow-md hover:shadow-2xl transition-all duration-400 overflow-hidden cursor-pointer">
 
             <div className="relative  overflow-hidden p-5">
 

@@ -1,4 +1,4 @@
-import React, { use } from 'react';
+import React, { use, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import logo from '../assets/logo/paw (1).png'
 import { AuthContext } from '../contexts/AuthContext';
@@ -8,6 +8,10 @@ const Login = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const { signInWithGoogle, singInUser } = use(AuthContext)
+
+    useEffect(() => {
+        document.title = "Login | PawMart";
+    }, []);
 
     const handleSignin = (e) => {
         e.preventDefault();
@@ -40,15 +44,15 @@ const Login = () => {
             })
     };
     return (
-        <div className="min-h-[calc(100vh-20px)] flex items-center justify-center bg-pink-50 relative overflow-hidden">
+        <div className="min-h-[calc(100vh-20px)] flex items-center justify-center  relative overflow-hidden">
             <div>
                 <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-10 md:gap-40 p-8 lg:p-10  ">
                     <div className="md:w-1/2 max-w-lg mx-auto text-center items-center lg:text-left space-y-4">
                         <img className='w-40 mx-auto md:mx-0' src={logo} alt="" />
                         <h1 className="text-4xl md:text-5xl font-extrabold text-pink-600 drop-shadow-lg">
-                            Welcome <span className='text-black'>Back</span>
+                            Welcome Back
                         </h1>
-                        <p className="text-lg mb-6 text-gray-700">
+                        <p className="text-lg mb-6 ">
                             Log in to continue caring for your little companions.🐾
                         </p>
                     </div>

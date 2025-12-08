@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from "react-router";
 import p1 from '../assets/logo/pet1.png'
 import p2 from '../assets/logo/food.png'
 import p3 from '../assets/logo/ac.png'
 import p4 from '../assets/logo/careProduct.png'
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const Categories = () => {
+    useEffect(() => {
+    AOS.init({ duration: 1000 });
+  }, []);
     return (
-        <div className='w-11/12 mx-auto px-4 sm:px-6'>
+        <div  data-aos="fade-in" className='w-11/12 mx-auto px-4 sm:px-6'>
             <h1 className='font-bold text-3xl md:text-5xl text-center text-pink-600'>Categories</h1>
 
             <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 py-10 gap-8 justify-center justify-items-center'>

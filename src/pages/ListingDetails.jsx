@@ -5,6 +5,7 @@ import axios from 'axios';
 import { AuthContext } from '../contexts/AuthContext';
 import LoadingSpinner from '../components/LoadingSpinner';
 import Swal from 'sweetalert2';
+import { Helmet } from 'react-helmet-async';
 
 const ListingDetails = () => {
 
@@ -64,6 +65,10 @@ const ListingDetails = () => {
     };
     return (
         <div className="w-11/12 mx-auto py-8 mb-10 px-4">
+            <Helmet>
+                <title>{product ? `${product.name} - PawMart` : "Loading... - PawMart"}</title>
+            </Helmet>
+
             <div className="max-w-390 mx-auto">
                 <Link to={'/pets-supplies'} className="mb-8 text-pink-600 hover:text-pink-700 font-semibold flex items-center gap-2 text-lg">
                     ← Back to Lists
@@ -84,7 +89,7 @@ const ListingDetails = () => {
                     </div>
                     <div className="px-8 py-4 md:p-12 flex flex-col justify-between space-y-4">
                         <div>
-                            <h1 className="text-3xl md:text-4xl font-extrabold text-gray-800 mb-4">
+                            <h1 className="text-3xl md:text-4xl font-extrabold mb-4">
                                 {product.name}
                             </h1>
                             <div className="flex items-center gap-3">
@@ -110,7 +115,7 @@ const ListingDetails = () => {
                                 <MapPin className="w-8 h-8 text-pink-500" />
                                 <div>
                                     <p className="font-semibold text-gray-600">Location</p>
-                                    <p className="md:text-xl font-bold">{product.location}</p>
+                                    <p className="md:text-xl text-black font-bold">{product.location}</p>
                                 </div>
                             </div>
 
@@ -118,10 +123,8 @@ const ListingDetails = () => {
                                 <Calendar className="w-8 h-8 text-pink-500" />
                                 <div>
                                     <p className="font-semibold text-gray-600">Available From</p>
-                                    <p className="text-xl font-bold">
-                                        {new Date(product.date).toLocaleDateString('en-GB', {
-                                            day: 'numeric', month: 'long', year: 'numeric'
-                                        })}
+                                    <p className="text-xl text-black font-bold">
+                                        {product.date}
                                     </p>
                                 </div>
                             </div>
@@ -135,7 +138,7 @@ const ListingDetails = () => {
                             </div>
                         </div>
                         <div>
-                            <h3 className="text-2xl font-bold text-gray-800 mb-4">About this {isAdoption ? "Pet" : "Product"}</h3>
+                            <h3 className="text-2xl font-bold mb-4">About this {isAdoption ? "Pet" : "Product"}</h3>
                             <p className="text-gray-600 text-lg leading-relaxed bg-gray-50 p-6 rounded-2xl">
                                 {product.description}
                             </p>
@@ -163,49 +166,49 @@ const ListingDetails = () => {
                         <form onSubmit={handleOrderSubmit} className="space-y-3">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div>
-                                    <label className="block font-semibold text-gray-700 mb-1">Your Name</label>
-                                    <input type="text" value={user?.displayName || "Guest User"} readOnly className="input input-bordered  focus:border-pink-500 focus:outline-none w-full bg-gray-100" />
+                                    <label className="block font-semibold  mb-1">Your Name</label>
+                                    <input type="text" value={user?.displayName || "Guest User"} readOnly className="input input-bordered  focus:border-pink-500 focus:outline-none w-full" />
                                 </div>
                                 <div>
-                                    <label className="block font-semibold text-gray-700 mb-1">Email</label>
-                                    <input type="email" value={user?.email || ""} readOnly className="input input-bordered  focus:border-pink-500 focus:outline-none w-full bg-gray-100" />
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                <div>
-                                    <label className="block font-semibold text-gray-700 mb-1">Listing ID</label>
-                                    <input type="text" value={product?._id || ""} readOnly className="input input-bordered  focus:border-pink-500 focus:outline-none w-full bg-gray-100 text-sm" />
-                                </div>
-                                <div>
-                                    <label className="block font-semibold text-gray-700 mb-1">Product/Pet Name</label>
-                                    <input type="text" value={product?.name || ""} readOnly className="input input-bordered  focus:border-pink-500 focus:outline-none w-full bg-gray-100" />
+                                    <label className="block font-semibold mb-1">Email</label>
+                                    <input type="email" value={user?.email || ""} readOnly className="input input-bordered  focus:border-pink-500 focus:outline-none w-full" />
                                 </div>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div>
-                                    <label className="block font-semibold text-gray-700 mb-1">Quantity</label>
+                                    <label className="block font-semibold mb-1">Listing ID</label>
+                                    <input type="text" value={product?._id || ""} readOnly className="input input-bordered  focus:border-pink-500 focus:outline-none w-full text-sm" />
+                                </div>
+                                <div>
+                                    <label className="block font-semibold mb-1">Product/Pet Name</label>
+                                    <input type="text" value={product?.name || ""} readOnly className="input input-bordered  focus:border-pink-500 focus:outline-none w-full" />
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div>
+                                    <label className="block font-semibold  mb-1">Quantity</label>
                                     <input
                                         type="number"
                                         min="1"
                                         value={isAdoption ? 1 : quantity}
                                         onChange={(e) => !isAdoption && setQuantity(e.target.value)}
                                         disabled={isAdoption}
-                                        className={`input input-bordered  focus:border-pink-500 focus:outline-none w-full ${isAdoption ? "bg-gray-200" : ""}`}
+                                        className={`input input-bordered  focus:border-pink-500 focus:outline-none w-full ${isAdoption ? "" : ""}`}
                                     />
                                     {isAdoption && <p className="text-sm text-gray-500 mt-1">Only 1 pet can be adopted</p>}
                                 </div>
                                 <div>
-                                    <label className="block font-semibold text-gray-700 mb-1">Price</label>
+                                    <label className="block font-semibold  mb-1">Price</label>
                                     <input
                                         type="text"
                                         value={isAdoption ? "Free Adoption" : `${product?.Price}`}
                                         readOnly
-                                        className="input input-bordered w-full bg-gray-100 font-bold text-pink-600  focus:border-pink-500 focus:outline-none"
+                                        className="input input-bordered w-full font-bold text-pink-600  focus:border-pink-500 focus:outline-none"
                                     />
                                 </div>
                             </div>
                             <div>
-                                <label className="block font-semibold text-gray-700 mb-1">
+                                <label className="block font-semibold  mb-1">
                                     Delivery / Pickup Address <span className="text-red-500">*</span>
                                 </label>
                                 <textarea
@@ -217,7 +220,7 @@ const ListingDetails = () => {
                                 />
                             </div>
                             <div>
-                                <label className="block font-semibold text-gray-700  mb-1">
+                                <label className="block font-semibold mb-1">
                                     Mobile Number <span className="text-red-500">*</span>
                                 </label>
                                 <input
@@ -229,7 +232,7 @@ const ListingDetails = () => {
                                 />
                             </div>
                             <div>
-                                <label className="block font-semibold text-gray-700 mb-1">Additional Notes (Optional)</label>
+                                <label className="block font-semibold  mb-1">Additional Notes (Optional)</label>
                                 <textarea
                                     rows="3"
                                     name='notes'
